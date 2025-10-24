@@ -1,0 +1,56 @@
+import matplotlib.pyplot as plt 
+from matplotlib.patches import Arc
+import numpy as np
+import pandas as pd
+from mplsoccer import Pitch, FontManager, Sbopen
+
+df = pd.read_csv('FCpythonevents.csv')
+df
+
+df['X'] = pd.to_numeric(df['X'], errors='coerce')
+df['Y'] = pd.to_numeric(df['Y'], errors='coerce')
+df['X2'] = pd.to_numeric(df['X2'], errors='coerce')
+df['Y2'] = pd.to_numeric(df['Y2'], errors='coerce')
+
+df['X'] = df['X'] * 1.2
+df['Y'] = df['Y'] * 0.8
+df['X2'] = df['X2'] * 1.2
+df['Y2'] = df['Y2'] * 0.8
+
+pitch = Pitch(pitch_type='statsbomb', pitch_color='#22312b', line_color='#c7d5cc')
+fig, ax = pitch.draw(figsize=(16, 11), constrained_layout=True, tight_layout=False)
+fig.set_facecolor('#22312b')
+
+pitch.draw(ax=ax)
+plt.gca().invert_yaxis()
+
+for x in range(len(df['X'])):
+    if df['Team'][x] == 'Chelsea':
+        plt.plot((df['X'][x], df['X2'][x]), (df['Y'][x], df['Y2'][x]), color='blue')
+        plt.scatter(df['X'][x], df['Y'][x], color='blue')
+    elif df['Team'][x] == 'Liverpool':
+        plt.plot((df['X'][x], df['X2'][x]), (df['Y'][x], df['Y2'][x]), color='red')
+        plt.scatter(df['X'][x], df['Y'][x], color='red')
+
+plt.show()
+
+pitch = Pitch(pitch_type='statsbomb', pitch_color='#22312b', line_color='#c7d5cc')
+fig, ax = pitch.draw(figsize=(16, 11), constrained_layout=True, tight_layout=False)
+fig.set_facecolor('#22312b')
+
+pitch.draw(ax=ax)
+plt.gca().invert_yaxis()
+
+passing_df = df[df['Event'] == 'Pass']
+
+for x in range(len(passing_df)):
+    if passing_df['Team'].iloc[x] == 'Chelsea':
+        plt.plot((passing_df['X'].iloc[x], passing_df['X2'].iloc[x]),
+                 (passing_df['Y'].iloc[x], passing_df['Y2'].iloc[x]), color='blue')
+        plt.scatter(passing_df['X'].iloc[x], passing_df['Y'].iloc[x], color='blue')
+    elif passing_df['Team'].iloc[x] == 'Liverpool':
+        plt.plot((passing_df['X'].iloc[x], passing_df['X2'].iloc[x]),
+                 (passing_df['Y'].iloc[x], passing_df['Y2'].iloc[x]), color='red')
+        plt.scatter(passing_df['X'].iloc[x], passing_df['Y'].iloc[x], color='red')
+        
+plt.show()
